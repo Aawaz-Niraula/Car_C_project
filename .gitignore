@@ -1,0 +1,9 @@
+# secrets and local tooling
+.env*
+.vercel/
+.DS_Store
+
+# impeccable session scratch (the design brief in .impeccable/surfaces is kept)
+.impeccable/questions/
+.impeccable/review/
+.impeccable/mocks/

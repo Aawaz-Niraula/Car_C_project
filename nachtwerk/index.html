@@ -1,0 +1,1136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nachtwerk N/01 Lichtfaden</title>
+<meta name="description" content="Nachtwerk N/01 Lichtfaden, a concept coupé filmed in a wet night depot. Scroll to drive the film.">
+<meta name="theme-color" content="#131517">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;1,400&family=Barlow+Semi+Condensed:wght@500;600;700&family=Big+Shoulders+Stencil:wght@600;800&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="frames/hd/000.webp" media="(min-width: 900px), (orientation: landscape)" fetchpriority="high">
+<link rel="preload" as="image" href="frames/mhd/000.webp" media="(max-width: 899px) and (orientation: portrait)" fetchpriority="high">
+<style>
+/*
+  World: the depot the car was filmed in.
+  Yellow = wayfinding only (lane, bay numerals, hazard posts, focus: "you are here").
+  Amber  = the one commit action (and the thread colour itself).
+  Plates = flat enamel signs; depth by overlap, never shadow.
+*/
+:root{
+  --ground:#131517; --ground-2:#1a1d20; --ground-3:#22262a; --black:#0a0b0c;
+  --bone:#ebe7de; --bone-2:#b6b2a9; --line:rgba(235,231,222,.14); --line-2:rgba(235,231,222,.28);
+  --plate:#e9e5dc; --plate-ink:#141516; --plate-ink-2:#46474a; --screw:#9a968e;
+  --yellow:#f2c230; --amber:#ff8a2b; --amber-hi:#ffa65c;
+  --sign:'Barlow Semi Condensed','Arial Narrow',system-ui,sans-serif;
+  --body:'Barlow',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --stencil:'Big Shoulders Stencil','Barlow Semi Condensed',Impact,sans-serif;
+  --gutter:clamp(20px,5.6vw,96px);
+  --out:cubic-bezier(.16,1,.3,1); --io:cubic-bezier(.65,0,.35,1);
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;background:var(--ground)}
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+body{margin:0;background:var(--ground);color:var(--bone);font-family:var(--body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;overflow-x:clip}
+img,canvas{display:block;max-width:100%}
+a{color:inherit}
+button,input,select,textarea{font:inherit;color:inherit}
+a[href],button:not(:disabled),select,label[for],.sw{cursor:pointer}
+button:disabled{cursor:not-allowed}
+::selection{background:var(--yellow);color:var(--black)}
+:focus-visible{outline:2px solid var(--yellow);outline-offset:3px}
+input,textarea{caret-color:var(--yellow)}
+html{scrollbar-width:none}
+html::-webkit-scrollbar{display:none}
+.skip{position:fixed;left:12px;top:-60px;z-index:200;background:var(--yellow);color:var(--black);padding:10px 14px;font-weight:600;text-decoration:none;transition:top .2s}
+.skip:focus{top:12px}
+
+/* ---------- shared depot parts ---------- */
+.plate{position:relative;color:var(--plate-ink);border-radius:3px;padding:22px 26px 22px;
+  background:
+    radial-gradient(circle at 10px 10px,var(--screw) 1.6px,transparent 2.2px),
+    radial-gradient(circle at calc(100% - 10px) 10px,var(--screw) 1.6px,transparent 2.2px),
+    radial-gradient(circle at 10px calc(100% - 10px),var(--screw) 1.6px,transparent 2.2px),
+    radial-gradient(circle at calc(100% - 10px) calc(100% - 10px),var(--screw) 1.6px,transparent 2.2px),
+    var(--plate)}
+.plate.dark{color:var(--bone);background:
+    radial-gradient(circle at 10px 10px,#4a4c50 1.6px,transparent 2.2px),
+    radial-gradient(circle at calc(100% - 10px) 10px,#4a4c50 1.6px,transparent 2.2px),
+    radial-gradient(circle at 10px calc(100% - 10px),#4a4c50 1.6px,transparent 2.2px),
+    radial-gradient(circle at calc(100% - 10px) calc(100% - 10px),#4a4c50 1.6px,transparent 2.2px),
+    var(--black);border:1px solid var(--line)}
+.plate h2,.plate h3{font-family:var(--sign);font-weight:700;letter-spacing:-.01em;line-height:1.02;margin:0;text-wrap:balance}
+.plate p{margin:0;color:var(--plate-ink-2);text-wrap:pretty}
+.plate.dark p{color:var(--bone-2)}
+.post{display:block;width:14px;flex:none;align-self:stretch;min-height:64px;background:repeating-linear-gradient(-45deg,var(--yellow) 0 9px,var(--black) 9px 18px);border-radius:1px}
+.bayno{font-family:var(--stencil);font-weight:800;color:var(--yellow);line-height:.78;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:48px;padding:13px 22px;border-radius:3px;font-family:var(--sign);font-size:16px;font-weight:700;letter-spacing:.01em;text-decoration:none;border:1.5px solid transparent;transition:background-color .2s,border-color .2s,color .2s,transform .15s var(--out)}
+.btn svg{width:18px;height:18px}
+.btn:active{transform:translateY(1px) scale(.98)}
+.btn-commit{background:var(--amber);color:var(--black)}
+.btn-commit:hover{background:var(--amber-hi);transform:translateY(-1px)}
+.btn-ghost{border-color:currentColor;color:inherit;background:transparent}
+.btn-ghost:hover{background:rgba(127,127,127,.12)}
+
+/* ---------- nav ---------- */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:calc(14px + env(safe-area-inset-top)) var(--gutter) 14px;transition:background-color .35s,border-color .35s;border-bottom:1px solid transparent}
+.nav.solid{background:rgba(19,21,23,.86);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-bottom-color:var(--line)}
+.wordmark{display:inline-flex;align-items:center;gap:10px;font-family:var(--sign);font-weight:700;font-size:18px;letter-spacing:.01em;text-decoration:none;padding:8px 0;min-height:44px}
+.wordmark i{width:9px;height:22px;background:repeating-linear-gradient(-45deg,var(--yellow) 0 5px,var(--black) 5px 10px)}
+.nav-r{display:flex;align-items:center;gap:8px}
+.sound,.nav-link{display:inline-flex;align-items:center;gap:9px;min-height:44px;padding:0 14px;border:1.5px solid var(--line-2);border-radius:3px;background:rgba(10,11,12,.35);font-family:var(--sign);font-size:15px;font-weight:600;color:var(--bone);text-decoration:none;transition:border-color .2s,background-color .2s,transform .15s}
+.sound:hover,.nav-link:hover{border-color:var(--bone)}
+.sound:active,.nav-link:active{transform:scale(.97)}
+.sound svg{width:18px;height:18px;flex:none}
+.sound .ico-on{display:none}.sound[aria-pressed=true] .ico-on{display:block}.sound[aria-pressed=true] .ico-off{display:none}
+.sound[aria-pressed=true]{border-color:var(--yellow)}
+.bars{display:inline-flex;align-items:center;gap:2px;height:14px}
+.bars i{width:2px;height:14px;background:currentColor;transform:scaleY(.18);transition:transform .12s linear}
+.sound[aria-pressed=true] .bars i{background:var(--yellow)}
+@media (max-width:560px){.sound-label{display:none}.sound{padding:0 12px}}
+
+/* ---------- the lane: the page's one timeline and scrollbar ---------- */
+.lane{position:fixed;z-index:60;left:calc(var(--gutter)*.42);top:96px;bottom:44px;width:4px;opacity:0;transition:opacity .8s .3s}
+.started .lane{opacity:1}
+.lane-line{position:absolute;inset:0;background:var(--yellow);opacity:.32;border-radius:1px}
+.lane-done{position:absolute;left:0;right:0;top:0;height:100%;background:var(--yellow);transform-origin:50% 0;transform:scaleY(0);border-radius:1px}
+.lane-marker{position:absolute;left:50%;top:0;width:18px;height:18px;margin:-9px 0 0 -9px;background:var(--yellow);clip-path:polygon(0 0,100% 50%,0 100%,22% 50%);will-change:transform}
+.lane ol{list-style:none;margin:0;padding:0}
+.lane li{position:absolute;left:0;top:calc(var(--y)*100%);transform:translateY(-50%)}
+.lane button{position:relative;display:flex;align-items:center;gap:10px;height:28px;padding:0 0 0 0;margin-left:-8px;background:none;border:0;color:var(--bone-2);font-family:var(--sign);font-size:13px;font-weight:600;white-space:nowrap}
+.lane button::before{content:"";width:20px;height:4px;background:var(--yellow);opacity:.55;transition:opacity .2s,width .25s var(--out)}
+.lane .no{font-family:var(--stencil);font-weight:800;font-size:14px;letter-spacing:.02em;color:var(--yellow);opacity:.7;transition:opacity .2s}
+.lane .nm{opacity:0;transform:translateX(-4px);transition:opacity .2s,transform .2s;color:var(--bone)}
+.lane button:hover .nm,.lane button:focus-visible .nm{opacity:1;transform:none;background:var(--black);padding:5px 10px;border-radius:2px}
+.lane button:hover::before,.lane button[aria-current=true]::before{opacity:1;width:28px}
+.lane button[aria-current=true] .no,.lane button:hover .no{opacity:1}
+@media (max-width:899px){
+  .lane{left:7px;top:calc(76px + env(safe-area-inset-top));bottom:calc(16px + env(safe-area-inset-bottom));width:3px;pointer-events:none}
+  .lane .nm,.lane .no{display:none}
+  .lane button::before{width:9px;height:3px}
+  .lane button[aria-current=true]::before{width:12px}
+  .lane-marker{width:12px;height:12px;margin:-6px 0 0 -4px}
+}
+
+/* ---------- film ---------- */
+.film{position:relative;height:533vh}
+.stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;background:var(--ground);isolation:isolate}
+.frame-wrap{position:absolute;inset:0}
+/* the canvas holds frames at native size; the compositor scales it with object-fit */
+.poster,.frame-wrap canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 50%}
+.poster{transition:opacity .5s}
+.poster.gone{opacity:0}
+.shade{position:absolute;inset:0;z-index:3;pointer-events:none;background:linear-gradient(180deg,rgba(19,21,23,.55) 0%,transparent 14%),radial-gradient(ellipse 90% 80% at 50% 50%,transparent 55%,rgba(10,11,12,.5) 100%)}
+.dim{position:absolute;inset:0;z-index:3;pointer-events:none;background:var(--ground);opacity:0}
+.chapters{position:absolute;inset:0;z-index:5;pointer-events:none}
+.ch{position:absolute;opacity:0;transition:opacity .55s var(--out),transform .8s var(--out);transform:translate3d(0,16px,0)}
+.ch.on{opacity:1;transform:none}
+.ch.on .plate a,.ch.on .plate button{pointer-events:auto}
+/* a bay sign: hazard post + stencil numeral overlapping the plate edge */
+.bay{display:flex;align-items:flex-end;gap:0}
+.bay .bayno{font-size:clamp(84px,9vw,150px);margin:0 -.06em -.02em 0;position:relative;z-index:2;transform:translateY(.12em)}
+.bay .post{min-height:0;height:clamp(70px,7.5vw,124px);margin-right:12px;align-self:flex-end}
+.ch .plate{width:min(27rem,36vw)}
+.ch .plate h2{font-size:clamp(28px,2.6vw,42px);margin-bottom:12px}
+.ch .plate p{font-size:16px}
+
+/* bay 01: name painted on the wet floor */
+.ch-hero{inset:0;transform:none}
+.hero-plate{position:absolute;left:var(--gutter);top:calc(88px + env(safe-area-inset-top));width:min(25rem,34vw)!important;padding:18px 22px 18px!important}
+.hero-plate .des{display:flex;justify-content:space-between;gap:16px;font-family:var(--sign);font-weight:700;font-size:15px;color:var(--plate-ink);border-bottom:1.5px solid var(--plate-ink);padding-bottom:8px;margin-bottom:10px}
+.hero-plate .des span:last-child{font-family:var(--stencil);font-weight:800;font-size:17px;letter-spacing:.02em}
+.hero-plate p{font-size:15.5px!important}
+.floor{position:absolute;left:0;right:0;bottom:4vh;margin:0;text-align:center;perspective:640px;perspective-origin:50% 0}
+.floor span.paint{display:inline-block;font-family:var(--stencil);font-weight:800;text-transform:uppercase;font-size:min(15vw,270px);line-height:.8;letter-spacing:.03em;color:rgba(235,231,222,.9);transform:rotateX(58deg);transform-origin:50% 100%;white-space:nowrap}
+.floor .l{display:inline-block;opacity:0;transition:opacity .9s var(--out);transition-delay:calc(var(--i)*55ms + 150ms)}
+.ch-hero.on .floor .l{opacity:1}
+.cue{position:absolute;right:var(--gutter);top:calc(96px + env(safe-area-inset-top));margin:0;font-family:var(--sign);font-size:15px;font-weight:600;color:var(--bone);display:flex;align-items:center;gap:10px}
+.cue svg{width:18px;height:18px;color:var(--yellow)}
+
+/* bay 02: bottom-left */
+.ch-2{left:var(--gutter);bottom:clamp(40px,8vh,90px)}
+/* bay 03: top-right inspection plate */
+.ch-3{right:var(--gutter);top:calc(96px + 3vh)}
+.ch-3 .bay{flex-direction:row-reverse}.ch-3 .bay .post{margin:0 0 0 12px}.ch-3 .bay .bayno{margin:0 0 -.02em -.06em}
+.rows{list-style:none;margin:14px 0 0;padding:0;border-top:1.5px solid var(--plate-ink)}
+.rows li{display:flex;justify-content:space-between;gap:18px;padding:9px 0;border-bottom:1px solid rgba(20,21,22,.22);font-size:15px}
+.rows li span:first-child{color:var(--plate-ink-2)}
+.rows li span:last-child{font-weight:600;font-variant-numeric:tabular-nums;text-align:right}
+/* bay 04: hung from the ceiling, top centre */
+.ch-4{left:50%;top:0;transform:translate3d(-50%,-24px,0)}
+.ch-4.on{transform:translate3d(-50%,0,0)}
+.ch-4 .hang{position:relative;padding-top:calc(78px + env(safe-area-inset-top));display:flex;flex-direction:column;align-items:center}
+.ch-4 .hang::before,.ch-4 .hang::after{content:"";position:absolute;top:0;height:calc(78px + env(safe-area-inset-top));width:1.5px;background:#7c7a75}
+.ch-4 .hang::before{left:22%}.ch-4 .hang::after{right:22%}
+.ch-4 .plate{width:min(34rem,46vw);text-align:center}
+.ch-4 .plate .bayno{display:block;font-size:46px;color:var(--plate-ink);margin-bottom:10px}
+/* bay 05: figures painted on the floor */
+.ch-5{left:var(--gutter);bottom:clamp(36px,7vh,80px);max-width:calc(100vw - 2*var(--gutter))}
+.ch-5 .plate{width:auto!important;padding:20px 26px 18px}
+.ch-5 .label{display:inline-flex;align-items:center;gap:12px;margin-bottom:12px;font-family:var(--sign);font-weight:700;font-size:20px}
+.ch-5 .label .bayno{font-size:40px}
+.figs{display:flex;flex-wrap:wrap;gap:clamp(18px,3vw,56px);margin:0}
+.figs div{display:grid;gap:4px}
+.figs dt{order:2;font-family:var(--sign);font-weight:600;font-size:15px;color:var(--bone)}
+.figs dd{order:1;margin:0;font-family:var(--stencil);font-weight:800;color:var(--yellow);font-size:clamp(56px,6.4vw,112px);line-height:.85;font-variant-numeric:tabular-nums;white-space:nowrap}
+.figs dd small{font-size:.36em;margin-left:.12em;color:var(--bone)}
+.ch-5 .fine{margin:12px 0 0;font-size:13.5px;color:var(--bone-2)}
+/* bay 06: exit sign */
+.ch-6{left:50%;top:50%;transform:translate3d(-50%,calc(-50% + 16px),0)}
+.ch-6.on{transform:translate3d(-50%,-50%,0)}
+.ch-6 .plate{width:min(40rem,calc(100vw - 2*var(--gutter)));text-align:center;padding:34px 36px 30px}
+.ch-6 .plate h2{font-size:clamp(34px,3.8vw,60px);margin-bottom:12px}
+.ch-6 .actions{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:24px}
+
+/* portrait phones: film on top, signs beneath */
+@media (max-width:899px) and (orientation:portrait){
+  .film{height:453vh}
+  .poster,.frame-wrap canvas{height:var(--img-h,64%)}
+  .shade{background:linear-gradient(180deg,rgba(19,21,23,.55) 0%,transparent 12%),linear-gradient(0deg,var(--ground) 0%,var(--ground) calc(100% - var(--img-h,64%)),transparent calc(100% - var(--img-h,64%) + 22%))}
+  .ch:not(.ch-hero){left:20px!important;right:20px!important;top:auto!important;bottom:calc(22px + env(safe-area-inset-bottom))!important;transform:translate3d(0,14px,0)!important}
+  .ch.on:not(.ch-hero){transform:none!important}
+  .ch .plate,.ch-4 .plate,.ch-6 .plate{width:100%!important}
+  .ch .plate{padding:18px 20px}
+  .ch .plate h2{font-size:clamp(25px,7vw,32px);margin-bottom:8px}
+  .ch .plate p{font-size:15.5px}
+  .bay .bayno{font-size:72px}.bay .post{height:60px}
+  .ch-3 .bay{flex-direction:row}.ch-3 .bay .post{margin:0 12px 0 0}.ch-3 .bay .bayno{margin:0 -.06em -.02em 0}
+  .ch-4 .hang{padding-top:0}.ch-4 .hang::before,.ch-4 .hang::after{display:none}
+  .ch-4 .plate{text-align:left}.ch-4 .plate .bayno{font-size:36px}
+  .rows li{padding:7px 0;font-size:14.5px}
+  .figs{gap:14px 26px}.figs dd{font-size:54px}
+  .ch-5 .label{font-size:18px}
+  .ch-6 .plate{padding:24px 20px}
+  .ch-6 .actions .btn{flex:1 1 100%}
+  .ch-hero .hero-plate{left:20px!important;right:20px;top:auto!important;bottom:calc(22px + env(safe-area-inset-bottom));width:auto!important}
+  .floor{bottom:auto;top:calc(var(--img-h,64%) - 15vw)}
+  .floor span.paint{font-size:19vw}
+  .cue{display:none}
+}
+@media (max-width:899px) and (orientation:landscape){.ch .plate{width:min(24rem,48vw)}.ch .plate p,.rows,.ch-5 .fine{display:none}.bay .bayno{font-size:60px}.bay .post{height:50px}.figs dd{font-size:44px}.ch-4 .hang{padding-top:64px}}
+
+/* ---------- bays below the film ---------- */
+.section{position:relative;padding:clamp(96px,14vh,170px) var(--gutter);background:var(--ground)}
+.bay-head{display:flex;align-items:flex-end;gap:14px;margin-bottom:clamp(30px,4vw,56px)}
+.bay-head .post{height:clamp(64px,6vw,96px);min-height:0;align-self:flex-end}
+.bay-head .bayno{font-size:clamp(72px,7vw,120px);transform:translateY(.1em)}
+.bay-head h2{font-family:var(--sign);font-weight:700;font-size:clamp(34px,4.2vw,68px);line-height:.98;letter-spacing:-.015em;margin:0 0 0 6px;text-wrap:balance;max-width:14em}
+.body{color:var(--bone-2);font-size:clamp(16px,1.1vw,17.5px);max-width:36em;text-wrap:pretty;margin:0}
+[data-reveal]{opacity:0;transform:translate3d(0,22px,0);transition:opacity .9s var(--out),transform 1.1s var(--out)}
+[data-reveal].in{opacity:1;transform:none}
+
+/* bay 07: thread colours, a sample board */
+.thread{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(28px,4vw,72px);align-items:center}
+.thread-view{position:relative;aspect-ratio:16/9;overflow:hidden;background:var(--black);border-radius:3px}
+.thread-view img,.thread-view canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.thread-view canvas{opacity:0;transition:opacity .6s var(--out)}
+.thread-view canvas.on{opacity:1}
+.board{margin-top:28px;padding:22px 22px 18px}
+.board legend{font-family:var(--sign);font-weight:700;font-size:15px;padding:0;margin-bottom:14px;color:var(--bone)}
+.swatches{border:0;margin:0;padding:0;display:grid;gap:8px}
+.sw{position:relative;display:block}
+.sw input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.sw-face{display:grid;grid-template-columns:1fr auto;align-items:center;gap:14px;padding:12px 14px;border:1.5px solid var(--line);border-radius:3px;transition:border-color .2s,background-color .2s}
+.sw:hover .sw-face{border-color:var(--line-2);background:rgba(235,231,222,.03)}
+.sw input:focus-visible+.sw-face{outline:2px solid var(--yellow);outline-offset:2px}
+.sw input:checked+.sw-face{border-color:var(--bone);background:rgba(235,231,222,.05)}
+.sw-name{font-family:var(--sign);font-weight:700;font-size:17px;display:flex;align-items:baseline;gap:10px}
+.sw-name small{font-family:var(--body);font-weight:400;font-size:14px;color:var(--bone-2)}
+.sw-fibre{width:clamp(70px,9vw,130px);height:3px;border-radius:2px;background:var(--c);opacity:.5;transition:opacity .25s,height .25s}
+.sw input:checked+.sw-face .sw-fibre{opacity:1;height:5px}
+.thread-current{margin:16px 0 0;font-size:15px;color:var(--bone-2);min-height:3.2em}
+.thread-current b{color:var(--bone);font-family:var(--sign);font-weight:700}
+
+/* bay 08: stills with origin tickets */
+.reel{position:relative;background:var(--ground)}
+.reel-pin{padding:clamp(80px,12vh,140px) 0 clamp(60px,8vh,100px)}
+.reel.pin .reel-pin{position:sticky;top:0;height:100vh;padding:0;display:flex;flex-direction:column;justify-content:center;overflow:hidden}
+.reel .bay-head{padding:0 var(--gutter);margin-bottom:clamp(24px,4vh,44px);justify-content:space-between;align-items:flex-end}
+.reel .bay-head>div{display:flex;align-items:flex-end;gap:14px}
+.reel-hint{display:none;align-items:center;gap:8px;font-family:var(--sign);font-weight:600;font-size:15px;color:var(--bone-2);padding-bottom:6px}
+.reel-hint svg{width:18px;height:18px;color:var(--yellow)}
+.reel-track{display:flex;gap:clamp(14px,1.6vw,26px);padding:0 var(--gutter);will-change:transform}
+.still{position:relative;flex:none;margin:0;height:min(58vh,620px);aspect-ratio:8/9;overflow:hidden;background:var(--black);border-radius:3px}
+.still:nth-child(3n+2){height:min(48vh,520px);align-self:flex-end}
+.still img{width:100%;height:100%;object-fit:cover;transform:scale(1.14);will-change:transform;transition:filter .4s}
+.still:hover img{filter:brightness(1.1)}
+.ticket{position:absolute;left:10px;top:10px;display:inline-flex;gap:10px;align-items:center;padding:7px 12px 7px 8px;background:var(--plate);color:var(--plate-ink);border-radius:2px;font-family:var(--sign);font-weight:700;font-size:13px;font-variant-numeric:tabular-nums}
+.ticket b{font-family:var(--stencil);font-weight:800;font-size:14px;background:var(--plate-ink);color:var(--yellow);padding:0 5px;border-radius:1px}
+.reel:not(.pin) .reel-track{overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain}
+.reel:not(.pin) .reel-track::-webkit-scrollbar{display:none}
+.reel:not(.pin) .still{scroll-snap-align:center;height:min(56vh,380px)}
+.reel:not(.pin) .still:nth-child(3n+2){height:min(48vh,330px)}
+.reel:not(.pin) .reel-hint{display:inline-flex}
+.reel:not(.pin) .still img{transform:none}
+
+/* bay 09: the inspection board */
+.spec-board{padding:clamp(28px,4vw,56px) clamp(24px,4vw,60px)}
+.spec-board .top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:16px 40px;border-bottom:3px solid var(--plate-ink);padding-bottom:18px;margin-bottom:6px}
+.spec-board h3{font-size:clamp(26px,2.6vw,40px)}
+.spec-board .top p{font-size:15px;max-width:30em}
+.spec-table{width:100%;border-collapse:collapse;font-size:16px}
+.spec-table th,.spec-table td{text-align:left;padding:14px 0;border-bottom:1px solid rgba(20,21,22,.2);vertical-align:baseline;font-weight:400}
+.spec-table th{color:var(--plate-ink-2);width:34%;padding-right:20px;font-family:var(--sign);font-weight:600}
+.spec-table td{font-weight:500;font-variant-numeric:tabular-nums}
+.spec-table tbody tr{transition:background-color .2s}
+.spec-table tbody tr:hover{background:rgba(242,194,48,.22)}
+.spec-cols{display:grid;grid-template-columns:1fr 1fr;gap:0 clamp(28px,4vw,64px)}
+
+/* bay 10: allocation */
+.alloc{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:clamp(32px,5vw,96px);align-items:start;background:var(--ground-2);border-top:1px solid var(--line)}
+.alloc .body{margin-top:4px}
+.contact-line{margin-top:24px;font-size:15px;color:var(--bone-2)}
+.contact-line a{color:var(--bone);text-underline-offset:4px;text-decoration-color:var(--line-2)}
+.contact-line a:hover{text-decoration-color:var(--yellow)}
+form:not([hidden]){display:grid;grid-template-columns:1fr 1fr;gap:22px 18px}
+form[hidden]{display:none}
+.field{display:grid;gap:8px;align-content:start}
+.field.full{grid-column:1/-1}
+.field label{font-family:var(--sign);font-weight:600;font-size:15px;color:var(--bone)}
+.field input,.field select,.field textarea{width:100%;background:var(--ground);border:1.5px solid var(--line-2);border-radius:3px;padding:12px 14px;font-size:16px;color:var(--bone);transition:border-color .2s;appearance:none;-webkit-appearance:none}
+.field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' stroke='%23b6b2a9' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:18px;padding-right:40px}
+.field select option{background:var(--ground-2)}
+.field textarea{resize:vertical;min-height:100px;line-height:1.5}
+.field input::placeholder,.field textarea::placeholder{color:#8a877f}
+.field input:hover,.field select:hover,.field textarea:hover{border-color:var(--bone-2)}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--yellow)}
+.field [aria-invalid=true]{border-color:#ff7a66}
+.err{font-size:14px;color:#ff9b8a}
+.err:empty{display:none}
+.form-foot{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;margin-top:6px}
+.form-foot p{margin:0;font-size:14px;color:var(--bone-2);max-width:30em}
+.done{display:none}
+.done.show{display:block}
+.done h3{font-size:28px;display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.done h3 svg{width:24px;height:24px}
+.done p{margin-bottom:22px!important}
+.done .row{display:flex;flex-wrap:wrap;gap:12px}
+
+/* footer: a credit block built from the film's real metadata */
+.foot{padding:clamp(70px,9vw,120px) var(--gutter) calc(30px + env(safe-area-inset-bottom));background:var(--black);border-top:1px solid var(--line)}
+.credits{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px 32px;font-size:14px;color:var(--bone-2);border-top:3px solid var(--yellow);padding-top:22px}
+.credits h3{font-family:var(--sign);font-weight:700;font-size:14px;color:var(--bone);margin:0 0 8px}
+.credits p{margin:0;line-height:1.55}
+.credits a{color:var(--bone);text-underline-offset:3px;text-decoration-color:var(--line-2)}
+.credits a:hover{text-decoration-color:var(--yellow)}
+.foot-row{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 32px;margin-top:40px;font-size:13.5px;color:var(--bone-2)}
+.foot-row nav{display:flex;flex-wrap:wrap;gap:6px 20px}
+.foot-row a{text-decoration:none;min-height:44px;display:inline-flex;align-items:center}
+.foot-row a:hover{color:var(--bone)}
+
+@media (max-width:899px){
+  .thread,.alloc{grid-template-columns:1fr}
+  .thread-view{order:-1}
+  .spec-cols{grid-template-columns:1fr}
+  .spec-table th{width:42%}
+  form:not([hidden]){grid-template-columns:1fr}
+  .credits{grid-template-columns:1fr 1fr}
+  .reel .bay-head{display:block}.reel-hint{margin-top:14px}
+  .section{padding-left:max(28px,var(--gutter));}
+}
+@media (max-width:480px){.credits{grid-template-columns:1fr}.bay-head .bayno{font-size:64px}.bay-head .post{height:54px}}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition-duration:.01ms!important;animation:none!important;transition-delay:0s!important}
+  [data-reveal]{opacity:1;transform:none}
+}
+</style>
+<noscript><style>.ch-hero{opacity:1}.floor .l{opacity:1}[data-reveal]{opacity:1;transform:none}</style></noscript>
+</head>
+<body>
+<a class="skip" href="#thread">Skip the film</a>
+
+
+<header class="nav" id="nav">
+  <a class="wordmark" href="#top" data-go-top><i aria-hidden="true"></i>Nachtwerk</a>
+  <div class="nav-r">
+    <button class="sound" id="sound" type="button" aria-pressed="false" aria-label="Sound off. Turn on sound">
+      <svg class="ico-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z"/><line x1="22" x2="16" y1="9" y2="15"/><line x1="16" x2="22" y1="9" y2="15"/></svg>
+      <svg class="ico-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z"/><path d="M16 9a5 5 0 0 1 0 6"/><path d="M19.364 18.364a9 9 0 0 0 0-12.728"/></svg>
+      <span class="bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      <span class="sound-label">Sound off</span>
+    </button>
+    <a class="nav-link" href="#allocation">Allocation</a>
+  </div>
+</header>
+
+<nav class="lane" id="lane" aria-label="Bays">
+  <div class="lane-line" aria-hidden="true"></div>
+  <div class="lane-done" id="laneDone" aria-hidden="true"></div>
+  <i class="lane-marker" id="laneMarker" aria-hidden="true"></i>
+  <ol id="laneBays"></ol>
+</nav>
+
+<main>
+<section class="film" id="top" aria-label="Film: the N/01 Lichtfaden in the depot">
+  <div class="stage" id="stage">
+    <div class="frame-wrap" id="frameWrap">
+      <picture>
+        <source media="(max-width: 899px) and (orientation: portrait)" srcset="frames/mhd/000.webp" width="864" height="1080">
+        <img class="poster" id="poster" src="frames/hd/000.webp" width="1920" height="1080" alt="The N/01 Lichtfaden, graphite with amber light lines, parked on a wet depot floor" fetchpriority="high">
+      </picture>
+      <canvas id="film" aria-hidden="true"></canvas>
+    </div>
+    <div class="shade" aria-hidden="true"></div>
+    <div class="dim" id="dim" aria-hidden="true"></div>
+
+    <div class="chapters">
+      <article class="ch ch-hero" data-ch="0">
+        <div class="plate hero-plate">
+          <div class="des"><span>Nachtwerk N/01</span><span>Bay 01</span></div>
+          <p>A concept coupé carrying one continuous line of light from nose to tail, filmed at night in a flooded depot.</p>
+        </div>
+        <h1 class="floor"><span class="paint" data-split aria-label="Lichtfaden">Lichtfaden</span></h1>
+        <p class="cue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 7 10 10"/><path d="M17 7v10H7"/></svg>Scroll to drive</p>
+      </article>
+
+      <article class="ch ch-2" data-ch="1">
+        <div class="bay"><span class="post" aria-hidden="true"></span><span class="bayno" aria-hidden="true">02</span></div>
+        <div class="plate">
+          <h2>One line of light, eleven metres long.</h2>
+          <p>Side-emitting optical fibre, laid by hand into a channel cut through the doors, sills and rear haunches. It shares a circuit with the headlamps and is the only ornament on the car.</p>
+        </div>
+      </article>
+
+      <article class="ch ch-3" data-ch="2">
+        <div class="bay"><span class="post" aria-hidden="true"></span><span class="bayno" aria-hidden="true">03</span></div>
+        <div class="plate">
+          <h2>Six cylinders behind the rear axle.</h2>
+          <p>A naturally aspirated 4.0-litre flat-six on individual throttle bodies, revving to 9,000 rpm, through a six-speed manual.</p>
+          <ul class="rows">
+            <li><span>Engine</span><span>Flat-six, 3,996 cc</span></li>
+            <li><span>Output</span><span>525 PS at 8,750 rpm</span></li>
+            <li><span>Drive</span><span>Rear wheels, manual</span></li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="ch ch-4" data-ch="3">
+        <div class="hang">
+          <div class="plate">
+            <span class="bayno" aria-hidden="true">04</span>
+            <h2>Set up on wet concrete.</h2>
+            <p>The chassis was tuned on this floor, hosed down at night so the limit arrives slowly. Forged magnesium centre-lock wheels, 20 inches front and 21 rear, over carbon-ceramic discs.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="ch ch-5" data-ch="4"><div class="plate dark">
+        <p class="label"><span class="bayno" aria-hidden="true">05</span>Launch figures</p>
+        <dl class="figs">
+          <div><dt>0 to 100 km/h</dt><dd><span data-count="3.4" data-dec="1">3.4</span><small>s</small></dd></div>
+          <div><dt>Dry weight</dt><dd><span data-count="1290">1,290</span><small>kg</small></dd></div>
+          <div><dt>Top speed</dt><dd><span data-count="312">312</span><small>km/h</small></dd></div>
+        </dl>
+        <p class="fine">Concept figures.</p>
+      </div></article>
+
+      <article class="ch ch-6" data-ch="5">
+        <div class="plate">
+          <h2>Nineteen cars. Then the line goes dark.</h2>
+          <p>Allocation is by conversation, not by deposit.</p>
+          <div class="actions" id="finalActions" inert>
+            <a class="btn btn-commit" href="#allocation">Request an allocation</a>
+            <a class="btn btn-ghost" href="#thread">Choose a thread colour</a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section thread" id="thread" aria-labelledby="thread-h">
+  <div>
+    <div class="bay-head" data-reveal><span class="post" aria-hidden="true"></span><span class="bayno" aria-hidden="true">07</span><h2 id="thread-h">Choose the colour of the thread.</h2></div>
+    <p class="body" data-reveal>Four colours, each matched to the calipers and the wheel pinstripe. Everything else on the car is specified by us, so this is the one decision that is yours.</p>
+    <div class="plate dark board" data-reveal>
+      <fieldset class="swatches" id="swatches">
+        <legend>Thread colour</legend>
+        <label class="sw"><input type="radio" name="thread" value="glut" checked><span class="sw-face" style="--c:#ff8a2b"><span class="sw-name">Glut<small>Amber</small></span><span class="sw-fibre"></span></span></label>
+        <label class="sw"><input type="radio" name="thread" value="eis"><span class="sw-face" style="--c:#5fc8ff"><span class="sw-name">Eis<small>Ice blue</small></span><span class="sw-fibre"></span></span></label>
+        <label class="sw"><input type="radio" name="thread" value="kreide"><span class="sw-face" style="--c:#f3efe6"><span class="sw-name">Kreide<small>Chalk</small></span><span class="sw-fibre"></span></span></label>
+        <label class="sw"><input type="radio" name="thread" value="signal"><span class="sw-face" style="--c:#ff3b30"><span class="sw-name">Signal<small>Red</small></span><span class="sw-fibre"></span></span></label>
+      </fieldset>
+      <p class="thread-current" id="threadCurrent" aria-live="polite"><b>Glut.</b> The amber of an exhaust manifold cooling after a run.</p>
+    </div>
+  </div>
+  <div class="thread-view" data-reveal>
+    <img id="threadImg" src="img/thread.webp" width="1280" height="720" alt="Side profile of the N/01 with the light thread lit" loading="lazy" decoding="async">
+    <canvas id="tvA" width="1280" height="720" aria-hidden="true"></canvas>
+    <canvas id="tvB" width="1280" height="720" aria-hidden="true"></canvas>
+  </div>
+</section>
+
+<section class="reel" id="reel" aria-labelledby="reel-h">
+  <div class="reel-pin">
+    <div class="bay-head" data-reveal>
+      <div><span class="post" aria-hidden="true"></span><span class="bayno" aria-hidden="true">08</span><h2 id="reel-h">Stills from the night shoot</h2></div>
+      <span class="reel-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m18 8 4 4-4 4"/><path d="M2 12h20"/><path d="m6 8-4 4 4 4"/></svg>Swipe the reel</span>
+    </div>
+    <div class="reel-track" id="reelTrack">
+      <figure class="still"><img src="img/reel-001.webp" width="640" height="720" alt="Three-quarter front view, headlamps lit, on a wet floor" loading="lazy" decoding="async"><span class="ticket"><b>01</b>00:00:00</span></figure>
+      <figure class="still"><img src="img/reel-025.webp" width="640" height="720" alt="Front view as the car turns through standing water" loading="lazy" decoding="async"><span class="ticket"><b>01</b>00:01:00</span></figure>
+      <figure class="still"><img src="img/reel-097.webp" width="640" height="720" alt="Rear wheel and wing with tyre smoke" loading="lazy" decoding="async"><span class="ticket"><b>03</b>00:04:00</span></figure>
+      <figure class="still"><img src="img/reel-181.webp" width="640" height="720" alt="Front wheel throwing spray, amber pinstripe on the rim" loading="lazy" decoding="async"><span class="ticket"><b>04</b>00:07:12</span></figure>
+      <figure class="still"><img src="img/reel-229.webp" width="640" height="720" alt="Door and sill with the amber light thread" loading="lazy" decoding="async"><span class="ticket"><b>04</b>00:09:12</span></figure>
+      <figure class="still"><img src="img/reel-301.webp" width="640" height="720" alt="The car approaching head-on through smoke" loading="lazy" decoding="async"><span class="ticket"><b>05</b>00:12:12</span></figure>
+      <figure class="still"><img src="img/reel-346.webp" width="640" height="720" alt="Close view of a headlamp and the ice-blue intake light" loading="lazy" decoding="async"><span class="ticket"><b>06</b>00:14:09</span></figure>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="specs" aria-labelledby="spec-h">
+  <div class="bay-head" data-reveal><span class="post" aria-hidden="true"></span><span class="bayno" aria-hidden="true">09</span><h2 id="spec-h">Inspection board</h2></div>
+  <div class="plate spec-board" data-reveal>
+    <div class="top">
+      <h3>N/01 Lichtfaden, coupé</h3>
+      <p>Concept figures for the first car. They will change at homologation.</p>
+    </div>
+    <div class="spec-cols">
+      <table class="spec-table"><caption class="vh" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Powertrain and performance</caption><tbody>
+        <tr><th scope="row">Engine</th><td>Naturally aspirated flat-six, rear-mounted</td></tr>
+        <tr><th scope="row">Displacement</th><td>3,996 cc</td></tr>
+        <tr><th scope="row">Output</th><td>525 PS at 8,750 rpm</td></tr>
+        <tr><th scope="row">Torque</th><td>465 Nm at 6,250 rpm</td></tr>
+        <tr><th scope="row">Redline</th><td>9,000 rpm</td></tr>
+        <tr><th scope="row">Transmission</th><td>Six-speed manual, limited-slip differential</td></tr>
+        <tr><th scope="row">0 to 100 km/h</th><td>3.4 s</td></tr>
+      </tbody></table>
+      <table class="spec-table"><caption class="vh" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Chassis and build</caption><tbody>
+        <tr><th scope="row">Top speed</th><td>312 km/h</td></tr>
+        <tr><th scope="row">Dry weight</th><td>1,290 kg</td></tr>
+        <tr><th scope="row">Brakes</th><td>Carbon-ceramic, 410 mm front, 390 mm rear</td></tr>
+        <tr><th scope="row">Wheels</th><td>Forged magnesium, centre-lock, 20 in / 21 in</td></tr>
+        <tr><th scope="row">Body</th><td>Carbon-fibre panels on steel and aluminium</td></tr>
+        <tr><th scope="row">Light thread</th><td>Side-emitting fibre, 11.4 m, four colours</td></tr>
+        <tr><th scope="row">Production</th><td>19 cars</td></tr>
+      </tbody></table>
+    </div>
+  </div>
+</section>
+
+<section class="section alloc" id="allocation" aria-labelledby="alloc-h">
+  <div>
+    <div class="bay-head" data-reveal><span class="post" aria-hidden="true"></span><span class="bayno" aria-hidden="true">10</span><h2 id="alloc-h">Request an allocation.</h2></div>
+    <p class="body" data-reveal>Nineteen cars, built one at a time. Tell us who you are and how you intend to drive it. The second question matters more than the first.</p>
+    <p class="contact-line" data-reveal>Or write to <a href="mailto:allocation@nachtwerk.example">allocation@nachtwerk.example</a></p>
+  </div>
+  <div data-reveal>
+    <form id="allocForm" novalidate>
+      <div class="field"><label for="f-name">Name</label><input id="f-name" name="name" autocomplete="name" placeholder="Your name" aria-describedby="e-name" required><span class="err" id="e-name"></span></div>
+      <div class="field"><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="email@example.com" aria-describedby="e-email" required><span class="err" id="e-email"></span></div>
+      <div class="field"><label for="f-country">Country of registration</label><input id="f-country" name="country" autocomplete="country-name" placeholder="Where the car will be registered" aria-describedby="e-country" required><span class="err" id="e-country"></span></div>
+      <div class="field"><label for="f-thread">Thread colour</label>
+        <select id="f-thread" name="thread"><option value="glut">Glut, amber</option><option value="eis">Eis, ice blue</option><option value="kreide">Kreide, chalk</option><option value="signal">Signal, red</option></select></div>
+      <div class="field full"><label for="f-use">How will you drive it?</label>
+        <select id="f-use" name="use"><option>Mostly on the road</option><option>Road, with track days</option><option>Mostly on track</option></select></div>
+      <div class="field full"><label for="f-msg">Anything else (optional)</label><textarea id="f-msg" name="message" rows="3" placeholder="The roads you drive, the cars you have kept"></textarea></div>
+      <div class="form-foot">
+        <p>Preparing the request opens your mail app with it filled in. Nothing is stored on this page.</p>
+        <button class="btn btn-commit" type="submit">Prepare request</button>
+      </div>
+    </form>
+    <div class="done plate" id="done" role="status" tabindex="-1">
+      <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Request ready</h3>
+      <p id="doneText">Your mail app should have opened with the request. If it did not, use the button below.</p>
+      <div class="row"><a class="btn btn-commit" id="mailLink" href="mailto:allocation@nachtwerk.example">Open in mail app</a><button class="btn btn-ghost" type="button" id="editReq">Edit request</button></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="credits">
+    <div><h3>Film</h3><p>15.0 s at 24 fps, 1280 × 720, graded. All 360 frames, mapped to scroll by visual motion.</p></div>
+    <div><h3>Delivery</h3><p>WebP frame sequence, sharpened: 11 MB desktop at 1440 × 810, 5.6 MB phone (4:5 reframe), streamed in priority order. Sound is the film's own track.</p></div>
+    <div><h3>Concept and build</h3><p>[Your name]<br><a href="mailto:hello@yourstudio.example">hello@yourstudio.example</a></p></div>
+    <div><h3>Status</h3><p>Nachtwerk is an invented marque. A design concept, not affiliated with any vehicle manufacturer. Figures are concept figures.</p></div>
+  </div>
+  <div class="foot-row">
+    <span>© 2026 [Your name]</span>
+    <nav aria-label="Footer"><a href="#thread">Thread colour</a><a href="#specs">Inspection board</a><a href="#allocation">Allocation</a><a href="#top" data-go-top>Back to the film</a></nav>
+  </div>
+</footer>
+
+<script>
+(() => {
+'use strict';
+/* ================= config ================= */
+const CUM = [0.0,0.00114,0.00229,0.00345,0.00462,0.00583,0.00708,0.00837,0.00973,0.01115,0.01266,0.01425,0.01594,0.01773,0.01964,0.02166,0.0238,0.02607,0.02847,0.03099,0.03363,0.03638,0.03926,0.04223,0.04532,0.0485,0.05181,0.05521,0.05874,0.06237,0.06612,0.06996,0.07386,0.07785,0.08193,0.08608,0.0903,0.09459,0.09894,0.10331,0.10771,0.1121,0.11647,0.1208,0.12509,0.12934,0.13355,0.13768,0.14174,0.14571,0.14959,0.15337,0.15705,0.16063,0.16429,0.16786,0.17137,0.1748,0.17817,0.1815,0.18479,0.18807,0.19132,0.19457,0.19781,0.20106,0.20434,0.20745,0.21057,0.21369,0.21682,0.21996,0.2231,0.22625,0.2294,0.23256,0.23573,0.23891,0.24209,0.24528,0.2485,0.25173,0.25497,0.25823,0.26148,0.26474,0.26798,0.27121,0.27443,0.27764,0.28085,0.28405,0.28726,0.29048,0.2937,0.29694,0.30021,0.3035,0.30683,0.31019,0.31358,0.31699,0.32042,0.32385,0.32729,0.33073,0.33417,0.33759,0.34101,0.3444,0.34778,0.35112,0.35444,0.35773,0.36102,0.36444,0.36775,0.37097,0.37409,0.37711,0.38004,0.38288,0.38564,0.38831,0.39091,0.39344,0.3959,0.39827,0.40044,0.40263,0.40486,0.40711,0.40938,0.41167,0.41399,0.41632,0.41867,0.42103,0.42341,0.42578,0.42816,0.43053,0.4329,0.43526,0.43761,0.43996,0.44231,0.44465,0.447,0.44934,0.4517,0.45406,0.45642,0.45879,0.46117,0.46354,0.46591,0.46828,0.47066,0.47302,0.47538,0.47772,0.48007,0.4824,0.48471,0.48701,0.4893,0.49157,0.49385,0.49611,0.49837,0.50063,0.50288,0.50514,0.5074,0.50965,0.5119,0.51415,0.51642,0.51868,0.52094,0.52321,0.52548,0.52774,0.53001,0.53226,0.53451,0.53675,0.53898,0.54121,0.54344,0.54566,0.54788,0.5501,0.55232,0.55453,0.55674,0.55895,0.56116,0.56337,0.56556,0.56776,0.56995,0.57212,0.57428,0.57642,0.57855,0.58066,0.58276,0.58486,0.58696,0.58905,0.59113,0.59321,0.59529,0.59736,0.59941,0.60146,0.60352,0.60556,0.60759,0.60961,0.61163,0.61363,0.61563,0.61761,0.6196,0.62157,0.62356,0.62555,0.62754,0.62953,0.63152,0.6335,0.63548,0.63745,0.63941,0.64136,0.64331,0.64529,0.64733,0.64943,0.65163,0.65394,0.65638,0.65898,0.66177,0.66475,0.66791,0.67126,0.67481,0.67855,0.68243,0.68645,0.69058,0.69478,0.69901,0.70323,0.7074,0.71151,0.71553,0.71947,0.72332,0.72704,0.73064,0.73411,0.73743,0.74057,0.74358,0.74646,0.74923,0.75189,0.75445,0.7569,0.75926,0.76154,0.76376,0.76593,0.76808,0.77021,0.77233,0.77445,0.77659,0.77873,0.7809,0.78309,0.78531,0.78756,0.78986,0.79218,0.79454,0.79692,0.79932,0.80173,0.80417,0.8066,0.80904,0.81147,0.8139,0.8163,0.81868,0.82103,0.82334,0.82562,0.82787,0.83009,0.83229,0.83446,0.83662,0.83877,0.84092,0.84307,0.84523,0.8474,0.84959,0.85179,0.854,0.85623,0.85847,0.8607,0.86296,0.86523,0.86752,0.86982,0.87214,0.87448,0.87684,0.8792,0.88158,0.88397,0.8864,0.88887,0.8914,0.89397,0.89661,0.89932,0.90213,0.90503,0.90807,0.91128,0.91469,0.9183,0.92211,0.92611,0.93029,0.93464,0.93915,0.9438,0.94859,0.95338,0.95811,0.96292,0.96776,0.9725,0.97721,0.98188,0.98651,0.99108,0.99558,1.0];
+const N = CUM.length;   // every native frame of the film (24 fps)
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const mq = q => matchMedia(q).matches;
+const REDUCE = mq('(prefers-reduced-motion: reduce)');
+const FINE = mq('(pointer: fine)');
+const MOBILE_SET = innerWidth < 900 && innerHeight > innerWidth * 1.05;
+const FW = MOBILE_SET ? 576 : 1440, FH = MOBILE_SET ? 720 : 810;
+const DIR = MOBILE_SET ? 'frames/mhd/' : 'frames/hd/';
+const FILE = location.protocol === 'file:';
+const qs = new URLSearchParams(location.search);
+const clamp = (v, a, b) => v < a ? a : v > b ? b : v;
+const smooth = (a, b, x) => { x = clamp((x - a) / (b - a), 0, 1); return x * x * (3 - 2 * x); };
+const pad = (n, l = 2) => String(n).padStart(l, '0');
+
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+scrollTo(0, 0);
+
+const frameForTime = t => clamp(Math.round(t * 24), 0, N - 1);
+const timeForFrame = f => f / 24;
+// CUM[i] = share of the film's visual motion completed by frame i (smoothed, monotonic).
+// Scroll position maps to CUM, so each pixel of scroll moves the picture by a similar amount,
+// with no stalls or surges, and every real frame is still shown in the fast passages.
+function frameForE(e) {
+  e = clamp(e, 0, 1);
+  let lo = 0, hi = N - 1;
+  while (hi - lo > 1) { const m = (lo + hi) >> 1; if (CUM[m] <= e) lo = m; else hi = m; }
+  const span = CUM[hi] - CUM[lo];
+  return lo + (span > 0 ? (e - CUM[lo]) / span : 0);
+}
+
+/* ================= chapters (bays 01-06) ================= */
+const CH = [
+  { t: 0.15, name: 'Ignition' },
+  { t: 2.2, name: 'The thread' },
+  { t: 3.7, name: 'Flat-six' },
+  { t: 8.2, name: 'Wet concrete' },
+  { t: 13.0, name: 'Launch' },
+  { t: 14.95, name: 'Nineteen' }
+];
+CH.forEach(c => { c.e = CUM[frameForTime(c.t)]; });
+CH[0].e = 0; CH[CH.length - 1].e = 1;
+// Linear scroll mapping: no slow-down zones, so speed under the finger is constant.
+const G = e => clamp(e, 0, 1), F = p => clamp(p, 0, 1);
+
+/* ================= DOM ================= */
+const root = document.documentElement;
+const film = $('#top'), stage = $('#stage'), frameWrap = $('#frameWrap');
+const canvas = $('#film'), ctx = canvas.getContext('2d', { alpha: false });
+const poster = $('#poster');
+const chEls = $$('.ch');
+const dim = $('#dim'), finalActions = $('#finalActions'), nav = $('#nav');
+
+$$('[data-split]').forEach(el => {
+  const txt = el.textContent; el.textContent = '';
+  [...txt].forEach((ch, i) => { const s = document.createElement('span'); s.className = 'l'; s.style.setProperty('--i', i); s.textContent = ch; s.setAttribute('aria-hidden', 'true'); el.appendChild(s); });
+});
+
+/* ================= frame loading ================= */
+const blobs = new Array(N).fill(null), bmps = new Array(N).fill(null);
+const requested = new Uint8Array(N), tries = new Uint8Array(N), decPending = new Uint8Array(N);
+let loaded = 0, inflight = 0, cur = 0, dir = 1, needDraw = true;
+const MAXNET = 8, order = [];
+{
+  const seen = new Uint8Array(N); const push = i => { if (!seen[i]) { seen[i] = 1; order.push(i); } };
+  push(0); for (let step = 64; step >= 1; step >>= 1) for (let i = 0; i < N; i += step) push(i); push(N - 1);
+}
+let oi = 0;
+function nextToFetch() {
+  for (let d = 0; d <= 20; d++) {
+    const a = cur + dir * d, b = cur - dir * d;
+    if (a >= 0 && a < N && !requested[a]) return a;
+    if (d <= 8 && b >= 0 && b < N && !requested[b]) return b;
+  }
+  while (oi < order.length && requested[order[oi]]) oi++;
+  return oi < order.length ? order[oi] : -1;
+}
+function onLoaded() { loaded++; pumpDec(); }
+function pumpNet() {
+  while (inflight < MAXNET) {
+    const i = nextToFetch(); if (i < 0) return;
+    requested[i] = 1; inflight++;
+    const url = DIR + pad(i, 3) + '.webp';
+    const fail = () => { inflight--; if (++tries[i] < 3) { requested[i] = 0; setTimeout(pumpNet, 800 * tries[i]); } else { loaded++; } pumpNet(); };
+    if (FILE) {
+      const im = new Image(); im.decoding = 'async'; im.src = url;
+      im.onload = () => { inflight--; blobs[i] = im; onLoaded(); pumpNet(); };
+      im.onerror = fail;
+    } else {
+      fetch(url).then(r => { if (!r.ok) throw 0; return r.blob(); })
+        .then(b => { inflight--; blobs[i] = b; onLoaded(); pumpNet(); }, fail);
+    }
+  }
+}
+
+/* ================= decoding (sliding window) ================= */
+// WebKit (macOS Safari and every iOS browser) can hand back ImageBitmaps whose pixels are
+// stored at device scale while reporting 1x dimensions, so drawImage shows a 2x crop of the
+// top-left quarter. Decode with <img> there; keep createImageBitmap (off-thread) elsewhere.
+const UA = navigator.userAgent;
+const IS_WEBKIT = /iPhone|iPad|iPod/.test(UA) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1) ||
+  (/AppleWebKit/.test(UA) && !/Chrome\/|Chromium|Edg\/|OPR\/|Firefox\//.test(UA));
+const HAS_CIB = typeof createImageBitmap === 'function' && !IS_WEBKIT;
+// rolling decode window around the playhead; everything else stays compressed in memory
+const W_DEC = 24, W_KEEP = 32, MAXDEC = 4;
+let decoding = 0;
+function decodeOne(i) {
+  decPending[i] = 1; decoding++;
+  const done = bm => {
+    decoding--; decPending[i] = 0;
+    if (bm) { if (Math.abs(i - cur) <= W_KEEP || i === 0) { bmps[i] = bm; needDraw = true; } else if (bm.close) bm.close(); }
+    pumpDec();
+  };
+  const src = blobs[i];
+  if (src instanceof HTMLImageElement) {
+    (src.decode ? src.decode() : Promise.resolve()).then(() => done(src), () => done(src));
+  } else if (HAS_CIB) {
+    createImageBitmap(src).then(done, () => done(null));
+  } else {
+    const url = URL.createObjectURL(src), im = new Image();
+    im.decoding = 'async'; im.src = url;
+    im.decode().then(() => { URL.revokeObjectURL(url); done(im); }, () => { URL.revokeObjectURL(url); done(null); });
+  }
+}
+function pumpDec() {
+  while (decoding < MAXDEC) {
+    let pick = -1;
+    for (let d = 0; d <= W_DEC && pick < 0; d++) {
+      const a = cur + dir * d, b = cur - dir * d;
+      if (a >= 0 && a < N && blobs[a] && !bmps[a] && !decPending[a]) pick = a;
+      else if (d <= W_DEC * 0.6 && b >= 0 && b < N && blobs[b] && !bmps[b] && !decPending[b]) pick = b;
+    }
+    if (pick < 0) return;
+    decodeOne(pick);
+  }
+}
+function evict() {
+  for (let i = 1; i < N; i++) { const bm = bmps[i]; if (bm && Math.abs(i - cur) > W_KEEP) { if (bm.close) bm.close(); bmps[i] = null; } }
+}
+function nearest(i) {
+  for (let d = 1; d < 48; d++) { if (i - d >= 0 && bmps[i - d]) return bmps[i - d]; if (i + d < N && bmps[i + d]) return bmps[i + d]; }
+  return bmps[0];
+}
+
+/* ================= canvas ================= */
+// The canvas backing store is locked to the frame's own size, once. Each frame is an unscaled
+// 1:1 blit; CSS object-fit hands scaling to the GPU compositor. Nothing is reallocated when
+// the window or a phone's address bar changes size.
+canvas.width = FW; canvas.height = FH;
+const dx = 0, dy = 0, dw = FW, dh = FH;
+function layoutStage() {
+  if (!MOBILE_SET) return;
+  const w = stage.clientWidth, h = stage.clientHeight;
+  stage.style.setProperty('--img-h', Math.round(Math.max(w * FH / FW, h * 0.64)) + 'px');
+}
+let firstDrawn = false, lastIdx = -1;
+function drawFrame(i) {
+  const b = bmps[i] || nearest(i);
+  if (!b) return false;
+  ctx.drawImage(b, 0, 0, FW, FH);
+  if (bmps[i]) lastIdx = i;
+  if (!firstDrawn) { firstDrawn = true; poster.classList.add('gone'); }
+  return true;
+}
+
+/* ================= metrics ================= */
+let filmTop = 0, filmLen = 1, filmEnd = 0, vh = innerHeight, docMax = 1;
+const reel = $('#reel'), reelTrack = $('#reelTrack'), stills = $$('.still', reelTrack), stillImgs = stills.map(s => s.querySelector('img'));
+let reelPin = false, reelTop = 0, reelLen = 1, reelShift = 0, stillGeo = [];
+const absTop = el => el.getBoundingClientRect().top + scrollY;
+
+/* the lane: ten bays, one line */
+const BAYS = [
+  ...CH.map((c, i) => ({ no: pad(i + 1), name: c.name, film: c.e })),
+  { no: '07', name: 'Thread colour', el: '#thread' },
+  { no: '08', name: 'Stills', el: '#reel' },
+  { no: '09', name: 'Inspection board', el: '#specs' },
+  { no: '10', name: 'Allocation', el: '#allocation' }
+];
+const laneBays = $('#laneBays'), laneMarker = $('#laneMarker'), laneDone = $('#laneDone'), lane = $('#lane');
+BAYS.forEach(b => {
+  const li = document.createElement('li');
+  const btn = document.createElement('button'); btn.type = 'button';
+  btn.innerHTML = '<span class="no">' + b.no + '</span><span class="nm">' + b.name + '</span>';
+  btn.setAttribute('aria-label', 'Bay ' + b.no + ': ' + b.name);
+  btn.addEventListener('click', () => scrollToY(b.y + (b.film === 1 ? 2 : 0)));
+  li.appendChild(btn); laneBays.appendChild(li); b.li = li; b.btn = btn;
+});
+let laneH = 1, activeBay = -1;
+
+function measure() {
+  vh = innerHeight;
+  filmTop = absTop(film);
+  filmLen = Math.max(1, film.offsetHeight - stage.offsetHeight);
+  filmEnd = filmTop + film.offsetHeight;
+  reelPin = FINE && innerWidth >= 900 && !REDUCE;
+  reel.classList.toggle('pin', reelPin);
+  if (reelPin) {
+    reelTrack.style.transform = '';
+    reelShift = Math.max(0, reelTrack.scrollWidth - innerWidth);
+    reel.style.height = (innerHeight + reelShift) + 'px';
+    stillGeo = stills.map(s => ({ c: s.offsetLeft + s.offsetWidth / 2 }));
+  } else {
+    reel.style.height = ''; reelTrack.style.transform = '';
+    stillImgs.forEach(im => { im.style.transform = ''; });
+  }
+  reelTop = absTop(reel);
+  reelLen = Math.max(1, reel.offsetHeight - innerHeight);
+  docMax = Math.max(1, document.documentElement.scrollHeight - innerHeight);
+  BAYS.forEach(b => {
+    b.y = b.film !== undefined ? filmTop + G(b.film) * filmLen : Math.min(docMax, absTop($(b.el)));
+    b.li.style.setProperty('--y', (b.y / docMax).toFixed(4));
+  });
+  laneH = lane.clientHeight;
+  lastReelQ = -1; lastLane = -1;
+}
+
+/* ================= scrolling ================= */
+let lenis = null;
+function scrollToY(y, immediate) {
+  if (lenis) lenis.scrollTo(y, { immediate: !!immediate, duration: immediate ? 0 : 1.6, easing: t => 1 - Math.pow(1 - t, 4) });
+  else window.scrollTo({ top: y, behavior: immediate || REDUCE ? 'auto' : 'smooth' });
+}
+document.addEventListener('click', e => {
+  const a = e.target.closest('a[href^="#"]'); if (!a) return;
+  const id = a.getAttribute('href').slice(1);
+  const el = id ? document.getElementById(id) : null; if (!el) return;
+  e.preventDefault();
+  if (a.hasAttribute('data-go-top') || id === 'top') { scrollToY(0); return; }
+  scrollToY(absTop(el));
+  if (id === 'allocation') setTimeout(() => $('#f-name').focus({ preventScroll: true }), lenis ? 1700 : 900);
+});
+
+/* ================= chapter state ================= */
+const chOn = new Array(CH.length).fill(false);
+let countersRun = false, started = false;
+function updateChapters(e) {
+  for (let i = 0; i < CH.length; i++) {
+    // windows widened with the shorter film so each plate keeps about the same reading distance
+    const on = started && (i === 0 ? e < 0.055 : i === CH.length - 1 ? e > 0.95 : Math.abs(e - CH[i].e) < 0.062);
+    if (on !== chOn[i]) {
+      chOn[i] = on; chEls[i].classList.toggle('on', on);
+      if (i === CH.length - 1) { if (on) finalActions.removeAttribute('inert'); else finalActions.setAttribute('inert', ''); }
+      if (on && i === 4 && !countersRun) { countersRun = true; runCounters(chEls[i]); }
+    }
+  }
+}
+function runCounters(scope) {
+  $$('[data-count]', scope).forEach(el => {
+    const to = parseFloat(el.dataset.count), dec = +(el.dataset.dec || 0), t0 = performance.now(), dur = REDUCE ? 1 : 1300;
+    const step = now => {
+      const u = clamp((now - t0) / dur, 0, 1), v = to * (1 - Math.pow(1 - u, 3));
+      el.textContent = v.toLocaleString('en-US', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+      if (u < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  });
+}
+
+/* ================= sound: granular scrub of the film's own audio ================= */
+const soundBtn = $('#sound'), soundLabel = $('.sound-label', soundBtn), barEls = $$('.bars i', soundBtn);
+let actx = null, abuf = null, master = null, analyser = null, freq = null, soundOn = false, lastGrain = 0, tPrev = 0, tvS = 0, loadingSound = false;
+async function enableSound() {
+  if (loadingSound) return;
+  try {
+    if (!actx) {
+      loadingSound = true; soundLabel.textContent = 'Loading';
+      const AC = window.AudioContext || window.webkitAudioContext;
+      actx = new AC();
+      master = actx.createGain(); master.gain.value = 0;
+      const comp = actx.createDynamicsCompressor(); comp.threshold.value = -16; comp.ratio.value = 4;
+      analyser = actx.createAnalyser(); analyser.fftSize = 64; analyser.smoothingTimeConstant = 0.7; freq = new Uint8Array(analyser.frequencyBinCount);
+      master.connect(comp); comp.connect(analyser); analyser.connect(actx.destination);
+      const res = await fetch('audio/depot.m4a'); if (!res.ok) throw new Error('audio');
+      const arr = await res.arrayBuffer();
+      abuf = await new Promise((ok, no) => { const p = actx.decodeAudioData(arr, ok, no); if (p && p.then) p.then(ok, no); });
+      const bed = actx.createBufferSource(); bed.buffer = abuf; bed.loop = true;
+      const lp = actx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 260;
+      const bg = actx.createGain(); bg.gain.value = 0.28;
+      bed.connect(lp); lp.connect(bg); bg.connect(master); bed.start();
+      loadingSound = false;
+    }
+    await actx.resume();
+    master.gain.cancelScheduledValues(actx.currentTime);
+    master.gain.setTargetAtTime(0.85, actx.currentTime, 0.2);
+    soundOn = true; tPrev = timeForFrame(shown);
+    setSoundUI();
+  } catch (err) {
+    loadingSound = false; soundOn = false; soundLabel.textContent = 'Sound unavailable'; soundBtn.disabled = true;
+  }
+}
+function disableSound() {
+  soundOn = false;
+  if (actx) { master.gain.cancelScheduledValues(actx.currentTime); master.gain.setTargetAtTime(0, actx.currentTime, 0.08); setTimeout(() => { if (!soundOn) actx.suspend(); }, 500); }
+  setSoundUI(); barEls.forEach(b => { b.style.transform = ''; });
+}
+function setSoundUI() {
+  soundBtn.setAttribute('aria-pressed', soundOn ? 'true' : 'false');
+  soundLabel.textContent = soundOn ? 'Sound on' : 'Sound off';
+  soundBtn.setAttribute('aria-label', soundOn ? 'Sound on. Turn off sound' : 'Sound off. Turn on sound');
+}
+soundBtn.addEventListener('click', () => { soundOn ? disableSound() : enableSound(); });
+function grain(offset, speed) {
+  const t0 = actx.currentTime + 0.004;
+  const src = actx.createBufferSource(); src.buffer = abuf;
+  src.playbackRate.value = clamp(0.82 + speed * 0.16, 0.78, 1.4);
+  const g = actx.createGain(), amp = clamp(speed / 1.1, 0.18, 1) * 0.7;
+  g.gain.setValueAtTime(0, t0); g.gain.linearRampToValueAtTime(amp, t0 + 0.03); g.gain.linearRampToValueAtTime(0, t0 + 0.2);
+  src.connect(g); g.connect(master);
+  src.start(t0, clamp(offset, 0, abuf.duration - 0.3), 0.24);
+  src.onended = () => { src.disconnect(); g.disconnect(); };
+}
+
+/* ================= thread configurator ================= */
+const SW = {
+  glut: null,
+  eis: { h: 200, s: 0.95, v: 1.06, note: 'The ice blue of the intake lights, carried down the flanks.' },
+  kreide: { h: 40, s: 0.07, v: 1.16, note: 'Near white. The quietest of the four in daylight, the brightest at night.' },
+  signal: { h: 357, s: 1, v: 0.98, note: 'The red of the tail lamps, run the full length of the car.' }
+};
+const GLUT_NOTE = 'The amber of an exhaust manifold cooling after a run.';
+const NAMES = { glut: 'Glut', eis: 'Eis', kreide: 'Kreide', signal: 'Signal' };
+function recolor(d, sw) {
+  const Ht = sw.h / 60;
+  for (let i = 0; i < d.length; i += 4) {
+    const r = d[i], g = d[i + 1], b = d[i + 2];
+    const mx = r > g ? (r > b ? r : b) : (g > b ? g : b); if (mx < 44) continue;
+    const mn = r < g ? (r < b ? r : b) : (g < b ? g : b); const c = mx - mn; if (c < 18) continue;
+    const s = c / mx; if (s < 0.26) continue;
+    let h; if (mx === r) h = ((g - b) / c) % 6; else if (mx === g) h = (b - r) / c + 2; else h = (r - g) / c + 4;
+    h *= 60; if (h < 0) h += 360;
+    const dh = Math.abs(h - 31); if (dh > 30) continue;
+    const w = Math.min(1, (30 - dh) / 11) * Math.min(1, (s - 0.26) / 0.16);
+    const v = Math.min(1, mx / 255 * sw.v), ns = Math.min(1, s * sw.s);
+    const ii = Math.floor(Ht) % 6, f = Ht - Math.floor(Ht), p = v * (1 - ns), q = v * (1 - ns * f), t = v * (1 - ns * (1 - f));
+    let R, G2, B;
+    switch (ii) { case 0: R = v; G2 = t; B = p; break; case 1: R = q; G2 = v; B = p; break; case 2: R = p; G2 = v; B = t; break; case 3: R = p; G2 = q; B = v; break; case 4: R = t; G2 = p; B = v; break; default: R = v; G2 = p; B = q; }
+    d[i] = r + (R * 255 - r) * w; d[i + 1] = g + (G2 * 255 - g) * w; d[i + 2] = b + (B * 255 - b) * w;
+  }
+}
+const threadImg = $('#threadImg'), tvA = $('#tvA'), tvB = $('#tvB'), threadCurrent = $('#threadCurrent'), fThread = $('#f-thread');
+let tFront = null, tBase = null, tCache = {}, tWorker = null, tWanted = 'glut', tPrepared = false;
+function tvShow(key) {
+  const c = tCache[key]; if (!c) return;
+  const back = tFront === tvA ? tvB : tvA;
+  back.getContext('2d').drawImage(c, 0, 0);
+  back.classList.add('on'); if (tFront) tFront.classList.remove('on'); tFront = back;
+}
+function prepareThread() {
+  if (tPrepared) return; tPrepared = true;
+  const go = () => {
+    const c0 = document.createElement('canvas'); c0.width = 1280; c0.height = 720;
+    const x0 = c0.getContext('2d'); x0.drawImage(threadImg, 0, 0, 1280, 720);
+    tCache.glut = c0;
+    try { tBase = x0.getImageData(0, 0, 1280, 720); } catch (e) { tBase = null; }
+    if (!tBase) return;
+    try {
+      const src = 'self.onmessage=function(e){var d=new Uint8ClampedArray(e.data.buf);(' + recolor.toString() + ')(d,e.data.sw);self.postMessage({key:e.data.key,buf:e.data.buf},[e.data.buf]);};';
+      tWorker = new Worker(URL.createObjectURL(new Blob([src], { type: 'text/javascript' })));
+      tWorker.onmessage = ev => {
+        const c = document.createElement('canvas'); c.width = 1280; c.height = 720;
+        c.getContext('2d').putImageData(new ImageData(new Uint8ClampedArray(ev.data.buf), 1280, 720), 0, 0);
+        tCache[ev.data.key] = c;
+        if (ev.data.key === tWanted) tvShow(tWanted);
+      };
+      ['eis', 'signal', 'kreide'].forEach(k => { const copy = tBase.data.slice().buffer; tWorker.postMessage({ key: k, sw: { h: SW[k].h, s: SW[k].s, v: SW[k].v }, buf: copy }, [copy]); });
+    } catch (e) { tWorker = null; }
+  };
+  if (threadImg.complete && threadImg.naturalWidth) go(); else { threadImg.loading = 'eager'; threadImg.addEventListener('load', go, { once: true }); }
+}
+function setThread(key, from) {
+  tWanted = key;
+  threadCurrent.innerHTML = '<b>' + NAMES[key] + '.</b> ' + (key === 'glut' ? GLUT_NOTE : SW[key].note);
+  if (from !== 'form') fThread.value = key;
+  if (from !== 'radio') { const r = $('input[name=thread][value=' + key + ']'); if (r) r.checked = true; }
+  prepareThread();
+  if (key === 'glut') { if (tFront) tFront.classList.remove('on'); tFront = null; }
+  else if (tCache[key]) tvShow(key);
+}
+$('#swatches').addEventListener('change', e => { if (e.target.name === 'thread') setThread(e.target.value, 'radio'); });
+$('#swatches').addEventListener('pointerover', prepareThread, { once: true });
+fThread.addEventListener('change', () => setThread(fThread.value, 'form'));
+
+/* ================= allocation form ================= */
+const form = $('#allocForm'), done = $('#done');
+const rules = {
+  name: v => v.trim().length > 1 || 'Add your name so we know who to reply to.',
+  email: v => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()) || 'That address is missing an @ or a domain, for example name@domain.com.',
+  country: v => v.trim().length > 1 || 'Tell us where the car will be registered. It decides the homologation route.'
+};
+function check(name) {
+  const el = form.elements[name], res = rules[name](el.value), err = $('#e-' + name);
+  const ok = res === true; el.setAttribute('aria-invalid', ok ? 'false' : 'true'); err.textContent = ok ? '' : res; return ok;
+}
+Object.keys(rules).forEach(n => form.elements[n].addEventListener('blur', () => { if (form.elements[n].value) check(n); }));
+form.addEventListener('submit', e => {
+  e.preventDefault();
+  const bad = Object.keys(rules).filter(n => !check(n));
+  if (bad.length) { form.elements[bad[0]].focus(); return; }
+  const f = form.elements;
+  const body = 'Name: ' + f.name.value.trim() + '\nEmail: ' + f.email.value.trim() + '\nCountry of registration: ' + f.country.value.trim() +
+    '\nThread colour: ' + NAMES[f.thread.value] + '\nDriving: ' + f.use.value + (f.message.value.trim() ? '\n\n' + f.message.value.trim() : '');
+  const href = 'mailto:allocation@nachtwerk.example?subject=' + encodeURIComponent('N/01 allocation request, ' + f.name.value.trim()) + '&body=' + encodeURIComponent(body);
+  $('#mailLink').href = href;
+  $('#doneText').textContent = 'Thread ' + NAMES[f.thread.value] + ', ' + f.use.value.toLowerCase() + '. Your mail app should have opened with the request filled in. If it did not, use the button below.';
+  form.hidden = true; done.classList.add('show'); done.focus({ preventScroll: true });
+  location.href = href;
+});
+$('#editReq').addEventListener('click', () => { done.classList.remove('show'); form.hidden = false; form.elements.name.focus(); });
+
+/* ================= reveal ================= */
+const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } }), { rootMargin: '0px 0px -10% 0px' });
+$$('[data-reveal]').forEach(el => io.observe(el));
+new IntersectionObserver(es => { if (es[0].isIntersecting) prepareThread(); }, { rootMargin: '600px 0px' }).observe($('#thread'));
+
+/* ?fps : on-screen frame-rate meter for device testing */
+let fpsEl = null, fpsN = 0, fpsT0 = 0, fpsWorst = 0, fpsDrops = 0;
+if (qs.has('fps')) {
+  fpsEl = document.createElement('div');
+  fpsEl.style.cssText = 'position:fixed;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:300;font:600 12px/1.4 ui-monospace,Menlo,monospace;background:rgba(0,0,0,.8);color:#ebe7de;padding:8px 10px;border:1px solid #f2c230;border-radius:2px;pointer-events:none;white-space:pre';
+  fpsEl.textContent = 'measuring…'; document.body.appendChild(fpsEl);
+}
+/* ?debug : report what this browser decodes and draws (diagnosing Safari-only cropping) */
+let dbgEl = null, dbgT = 0;
+const perfStat = { n: 0, sum: 0, max: 0, miss: 0, frames: [], reset() { this.n = 0; this.sum = 0; this.max = 0; this.miss = 0; this.frames = []; } };
+window.__perf = perfStat;
+if (qs.has('debug')) {
+  dbgEl = document.createElement('div');
+  dbgEl.style.cssText = 'position:fixed;right:12px;top:80px;z-index:300;font:600 12px/1.45 ui-monospace,Menlo,monospace;background:rgba(0,0,0,.85);color:#ebe7de;padding:10px 12px;border:1px solid #f2c230;border-radius:2px;pointer-events:none;white-space:pre;max-width:46ch';
+  document.body.appendChild(dbgEl);
+}
+function dbgTick(now) {
+  if (now - dbgT < 400) return; dbgT = now;
+  const b = bmps[Math.floor(shown)] || nearest(Math.floor(shown));
+  const r = canvas.getBoundingClientRect(), cs = getComputedStyle(canvas), fw = getComputedStyle(frameWrap);
+  dbgEl.textContent = [
+    'webkit ' + IS_WEBKIT + '  bitmapAPI ' + HAS_CIB + '  dpr ' + devicePixelRatio,
+    'frame src ' + (b ? (b.constructor.name + ' ' + (b.naturalWidth || b.width) + 'x' + (b.naturalHeight || b.height)) : 'none'),
+    'canvas px ' + canvas.width + 'x' + canvas.height + '  css ' + Math.round(r.width) + 'x' + Math.round(r.height) + ' @' + Math.round(r.left) + ',' + Math.round(r.top),
+    'computed ' + cs.width + ' x ' + cs.height,
+    'draw ' + [dx, dy, dw, dh].map(v => Math.round(v)).join(', '),
+    'wrap ' + fw.transform + '  frame ' + Math.round(shown) + '/' + (N - 1),
+    'inner ' + innerWidth + 'x' + innerHeight + '  visual ' + (window.visualViewport ? visualViewport.scale.toFixed(2) : '-'),
+    'poster ' + poster.className + '  ' + poster.currentSrc.split('/').slice(-2).join('/')
+  ].join('\n');
+}
+function fpsTick(now, raw) {
+  if (!fpsT0) fpsT0 = now;
+  fpsN++; if (raw > fpsWorst) fpsWorst = raw;
+  if (raw > 25) fpsDrops++;
+  if (now - fpsT0 >= 500) {
+    fpsEl.textContent = Math.round(fpsN * 1000 / (now - fpsT0)) + ' fps\nworst ' + fpsWorst.toFixed(1) + ' ms\nslow frames ' + fpsDrops;
+    fpsN = 0; fpsT0 = now; fpsWorst = 0;
+  }
+}
+
+/* ================= main loop ================= */
+let shown = 0, shownE = 0, targetE = 0, lastT = performance.now(), velS = 0, lastE = -1, lastReelQ = -1, lastDim = -1, navSolid = false, lastLane = -1;
+function loop(now) {
+  if (fpsEl) fpsTick(now, now - lastT);
+  if (dbgEl) { dbgTick(now); perfStat.frames.push(now - lastT); }
+  const dt = Math.min(50, now - lastT || 16.7); lastT = now;
+  if (lenis) lenis.raf(now);
+  const y = window.scrollY;
+  const inFilm = y < filmEnd;
+
+  let e = clamp((y - filmTop) / filmLen, 0, 1);
+  if (REDUCE) { let best = 0; for (let i = 0; i < CH.length; i++) if (Math.abs(CH[i].e - e) < Math.abs(CH[best].e - e)) best = i; e = CH[best].e; }
+  targetE = e;
+  const prev = shown;
+  if (REDUCE) shownE = targetE;
+  else {
+    // frame-rate independent damping: touch already has native inertia, so track it tightly;
+    // Lenis already smooths wheel input; Safari's native trackpad scroll gets a light touch.
+    const lambda = !FINE ? 30 : (lenis ? 26 : 20);
+    shownE += (targetE - shownE) * (1 - Math.exp(-lambda * dt / 1000));
+    if (Math.abs(targetE - shownE) < 1e-5) shownE = targetE;
+  }
+  shown = frameForE(shownE);
+  const vel = (shown - prev) / dt * 1000;
+  velS += (vel - velS) * 0.18;
+
+  const ci = Math.round(shown);
+  if (ci !== cur) { dir = ci > cur ? 1 : -1; cur = ci; evict(); pumpDec(); pumpNet(); }
+
+  if (inFilm) {
+    if (needDraw || ci !== lastIdx) {
+      const d0 = dbgEl ? performance.now() : 0;
+      if (drawFrame(ci)) needDraw = false;
+      if (dbgEl) { const dms = performance.now() - d0; perfStat.n++; perfStat.sum += dms; if (dms > perfStat.max) perfStat.max = dms; if (!bmps[ci]) perfStat.miss++; }
+    }
+    if (e !== lastE) { updateChapters(e); lastE = e; }
+    const dv = smooth(CH[CH.length - 1].e - 0.06, CH[CH.length - 1].e - 0.005, shownE) * 0.62;
+    if (Math.abs(dv - lastDim) > 0.003) { dim.style.opacity = dv.toFixed(3); lastDim = dv; }
+  }
+
+  // the lane: marker, painted progress, active bay
+  const lf = clamp(y / docMax, 0, 1);
+  if (Math.abs(lf - lastLane) > 0.0002) {
+    lastLane = lf;
+    laneMarker.style.transform = 'translate3d(0,' + (lf * laneH).toFixed(1) + 'px,0)';
+    laneDone.style.transform = 'scaleY(' + lf.toFixed(4) + ')';
+    let a = 0; for (let i = 0; i < BAYS.length; i++) if (y >= BAYS[i].y - vh * 0.35) a = i;
+    if (a !== activeBay) { if (activeBay >= 0) BAYS[activeBay].btn.removeAttribute('aria-current'); activeBay = a; BAYS[a].btn.setAttribute('aria-current', 'true'); }
+  }
+
+  if (soundOn && abuf) {
+    const tNow = timeForFrame(shown);
+    const tv = (tNow - tPrev) / (dt / 1000); tPrev = tNow;
+    tvS += (tv - tvS) * 0.25;
+    if (inFilm && Math.abs(tvS) > 0.06 && now - lastGrain > 52) { grain(tNow, Math.abs(tvS)); lastGrain = now; }
+    analyser.getByteFrequencyData(freq);
+    for (let b = 0; b < 4; b++) { const v = (freq[1 + b * 3] + freq[2 + b * 3]) / 510; barEls[b].style.transform = 'scaleY(' + (0.18 + v * 0.82).toFixed(2) + ')'; }
+  }
+
+  const solid = y > filmEnd - 90;
+  if (solid !== navSolid) { navSolid = solid; nav.classList.toggle('solid', solid); }
+
+  if (reelPin && y > reelTop - vh && y < reelTop + reelLen + vh) {
+    const q = clamp((y - reelTop) / reelLen, 0, 1);
+    if (Math.abs(q - lastReelQ) > 0.0002) {
+      lastReelQ = q; const sx = -q * reelShift;
+      reelTrack.style.transform = 'translate3d(' + sx.toFixed(1) + 'px,0,0)';
+      const vw2 = innerWidth / 2;
+      for (let i = 0; i < stills.length; i++) {
+        const rel = (stillGeo[i].c + sx - vw2) / innerWidth;
+        if (rel > -1.2 && rel < 1.2) stillImgs[i].style.transform = 'translate3d(' + (rel * -7).toFixed(2) + '%,0,0) scale(1.14)';
+      }
+    }
+  }
+  requestAnimationFrame(loop);
+}
+
+/* ================= start: no loading wall ================= */
+// The first frame is already in the HTML as the poster, so the page is usable at once.
+// Frames stream in priority order behind it; the canvas takes over when frame 0 decodes.
+function start() {
+  measure(); layoutStage();
+  started = true; root.classList.add('started'); lastE = -1;
+  shownE = targetE = clamp((window.scrollY - filmTop) / filmLen, 0, 1);
+}
+const bootIv = setInterval(() => {
+  if (blobs[0] && !bmps[0] && !decPending[0]) decodeOne(0);
+  if (bmps[0]) { needDraw = true; clearInterval(bootIv); }
+}, 30);
+
+// Lenis drives scrolling from rAF. Safari caps rAF at 60 fps on 120 Hz screens by default,
+// so in WebKit we keep Safari's own 120 Hz trackpad scrolling instead.
+if (!REDUCE && FINE && !IS_WEBKIT) {
+  const s = document.createElement('script');
+  s.src = 'https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js'; s.async = true;
+  s.onload = () => { if (window.Lenis) lenis = new window.Lenis({ lerp: 0.09, smoothWheel: true, wheelMultiplier: 0.95 }); };
+  document.head.appendChild(s);
+}
+
+let rz = 0;
+addEventListener('resize', () => { cancelAnimationFrame(rz); rz = requestAnimationFrame(() => { measure(); layoutStage(); lastE = -1; }); });
+addEventListener('orientationchange', () => setTimeout(() => { measure(); layoutStage(); }, 250));
+addEventListener('load', () => {
+  measure();
+  const debugP = qs.get('p'), debugTo = qs.get('to');
+  if (debugP !== null) scrollToY(filmTop + clamp(+debugP, 0, 1) * filmLen, true);
+  if (debugTo) { const el = document.getElementById(debugTo); if (el) scrollToY(absTop(el), true); }
+  if (debugP !== null || debugTo !== null) shownE = targetE = clamp((window.scrollY - filmTop) / filmLen, 0, 1);
+});
+document.addEventListener('visibilitychange', () => { if (!actx || !soundOn) return; if (document.hidden) actx.suspend(); else actx.resume(); });
+if (document.fonts) document.fonts.addEventListener && document.fonts.addEventListener('loadingdone', () => measure());
+
+start();
+pumpNet();
+requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
